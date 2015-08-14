@@ -1,0 +1,46 @@
+apply plugin: 'com.android.model.application'
+
+
+
+model {
+    android {
+        compileSdkVersion = 22
+        buildToolsVersion = "22.0.1"
+
+        defaultConfig.with {
+            applicationId = "com.zhaoxiaodan.android_hook_demo"
+            minSdkVersion.apiLevel = 10
+            targetSdkVersion.apiLevel = 22
+            versionCode = 1
+            versionName = "1.0"
+        }
+
+    }
+
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles += file('proguard-rules.pro')
+        }
+    }
+
+    android.ndk {
+        moduleName = "hookdemo"
+        cppFlags += ["-std=c++11", "-DHAVE_LITTLE_ENDIAN"]
+        ldLibs += ["log", "z", "android", "atomic", "dvm", "android_runtime"]
+        stl = "gnustl_static"
+
+        ldFlags += "-Lsrc/main/jniLibs/x86"
+        abiFilters += ["x86"]
+
+
+        cppFlags  += "-I${android_source_dir}/dalvik".toString()
+        cppFlags  += "-I${android_source_dir}/dalvik/vm".toString()
+    }
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.android.support:appcompat-v7:22.2.0'
+}
