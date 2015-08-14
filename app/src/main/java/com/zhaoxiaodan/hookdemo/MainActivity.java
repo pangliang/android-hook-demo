@@ -18,27 +18,26 @@ public class MainActivity extends Activity
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		Log.d(TAG, "===========before hook:" + this.test());
-		hook(MainActivity.class, "test", "()Ljava/lang/String;");
-		Log.d(TAG, "===========after hook:" + this.test());
+		String param1 = "param1";
+		Log.d(TAG, "===========before hook test:" + this.test(param1));
+		hook(MainActivity.class, "test", "(Ljava/lang/String;)Ljava/lang/String;");
+		Log.d(TAG, "===========after hook test:" + this.test(param1));
 
-		Log.d(TAG, "===========before hook:" + this.test2222());
-		hook2(MainActivity.class, "test2222", NewClass.class, "test2222","()Ljava/lang/String;");
-		Log.d(TAG, "===========after hook:" + this.test2222());
+		Log.d(TAG, "===========before hook staticTest:" + this.staticTest(param1));
+		hook(MainActivity.class, "staticTest", "(Ljava/lang/String;)Ljava/lang/String;");
+		Log.d(TAG, "===========after hook staticTest:" + this.staticTest(param1));
 
 	}
 
-	public String test()
+	public static String staticTest(String param1)
 	{
-		return "111111";
+		return "staticTest";
 	}
 
-	public String test2222()
+	public String test(String param1)
 	{
-		return "111111";
+		return "11111";
 	}
 
 	public native void hook(Class<?> clazzToHook, String methodName, String methodSig);
-
-	public native void hook2(Class<?> clazzToHook, String methodName, Class<?> proxyClazz, String proxyMethod, String methodSig);
 }
