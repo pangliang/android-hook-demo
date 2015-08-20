@@ -6,6 +6,7 @@
 #define ANDROID_HOOK_DEMO_LOG_H
 
 #include "android/log.h"
+#include "Dalvik.h"
 
 #define  LOG_TAG    "[---hookdemo---]"
 

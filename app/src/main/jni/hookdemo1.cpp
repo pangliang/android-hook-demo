@@ -2,8 +2,7 @@
 #include "log.h"
 #include "Dalvik.h"
 
-
-void showMethodInfo(const Method* method)
+static void showMethodInfo(const Method* method)
 {
     //看看method的各个属性都是啥:
     LOGD("accessFlags:%d",method->accessFlags);
@@ -15,14 +14,10 @@ void showMethodInfo(const Method* method)
 }
 
 /**
- * 替换原来java类中test方法的 本地c 函数
- * args : 原来函数的参数数组
- * pResult: 返回值
+ * 使用jni GetMethodID 方法获取jmethodID 强制转为 Method 的hook 方法 示例
  */
 static void newTestMethod(const u4* args, JValue* pResult,
                           const Method* method, struct Thread* self) {
-
-    showMethodInfo(method);
 
     // args 是原来函数的参数数组, 原来test函数只有一个String型参数
     // 并且要注意, 如果是不是static函数, 下标0 是函数所在类的实例obj
@@ -46,16 +41,12 @@ static void newTestMethod(const u4* args, JValue* pResult,
     return;
 }
 
-/**
- * hook 的jni 函数
- */
 extern "C" JNIEXPORT void JNICALL
-Java_com_zhaoxiaodan_hookdemo_MainActivity_hook(JNIEnv *env, jobject instance, jobject clazzToHook,
+Java_com_zhaoxiaodan_hookdemo_Demo1_hook(JNIEnv *env, jobject instance, jobject clazzToHook,
                                                 jstring methodName_, jstring methodSig_) {
 
     const char *methodName = env->GetStringUTFChars(methodName_, 0);
     const char *methodSig = env->GetStringUTFChars(methodSig_, 0);
-
 
     jmethodID methodIDToHook = env->GetMethodID((jclass) clazzToHook,methodName,methodSig);
 
@@ -100,13 +91,3 @@ Java_com_zhaoxiaodan_hookdemo_MainActivity_hook(JNIEnv *env, jobject instance, j
     env->ReleaseStringUTFChars(methodSig_, methodSig);
 }
 
-extern "C" JNIEXPORT jint JNI_OnLoad(JavaVM* vm, void* reserved)
-{
-
-    JNIEnv *env = nullptr;
-    if (vm->GetEnv((void**) &env, JNI_VERSION_1_6) != JNI_OK) {
-        return -1;
-    }
-
-    return JNI_VERSION_1_6;
-}
