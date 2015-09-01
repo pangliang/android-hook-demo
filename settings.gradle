@@ -1,1 +1,1 @@
-include ':app-dalvik', ':app-art'
+include ':app-dalvik', ':app-art', ':app-elf'

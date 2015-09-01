@@ -1,0 +1,45 @@
+apply plugin: 'com.android.model.application'
+
+
+
+model {
+    android {
+        compileSdkVersion = 21
+        buildToolsVersion = "22.0.1"
+
+        defaultConfig.with {
+            applicationId = "com.zhaoxiaodan.android_hook_demo_elf"
+            minSdkVersion.apiLevel = 10
+            targetSdkVersion.apiLevel = 22
+            versionCode = 1
+            versionName = "1.0"
+        }
+
+    }
+
+    android.buildTypes {
+        release {
+            minifyEnabled = false
+            proguardFiles += file('proguard-rules.pro')
+        }
+    }
+
+    android.ndk {
+        moduleName = "hookdemo-elf"
+        toolchain = "gcc"
+        toolchainVersion = "4.9"
+
+        cppFlags += ["-std=c++11"]
+        ldLibs += ["log", "z", "android"]
+        stl = "gnustl_static"
+
+        abiFilters += ["x86"]
+        abiFilters += ["armeabi-v7a"]
+
+    }
+}
+
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

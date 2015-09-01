@@ -1,4 +1,4 @@
-package com.zhaoxiaodan.hookdemo.dalvik;
+package com.zhaoxiaodan.hookdemo.elf;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -8,9 +8,8 @@ import android.widget.Button;
 public class MainActivity extends Activity
 {
 	static {
-		System.loadLibrary("hookdemo-dalvik");
+		System.loadLibrary("hookdemo-elf");
 	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
@@ -22,10 +21,9 @@ public class MainActivity extends Activity
 			@Override
 			public void onClick(View v)
 			{
-				new Demo2().demo();
+				new Demo1().demo();
 			}
 		});
 	}
-
 
 }
