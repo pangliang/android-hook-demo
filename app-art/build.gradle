@@ -4,13 +4,13 @@ apply plugin: 'com.android.model.application'
 
 model {
     android {
-        compileSdkVersion = 21
+        compileSdkVersion = 22
         buildToolsVersion = "22.0.1"
 
         defaultConfig.with {
             applicationId = "com.zhaoxiaodan.android_hook_demo_art"
-            minSdkVersion.apiLevel = 21
-            targetSdkVersion.apiLevel = 21
+            minSdkVersion.apiLevel = 22
+            targetSdkVersion.apiLevel = 22
             versionCode = 1
             versionName = "1.0"
         }
@@ -30,26 +30,31 @@ model {
         toolchainVersion = "4.9"
 
         CFlags += ["-D_USING_LIBCXX", "-UNDEBUG","-O1", "-DDYNAMIC_ANNOTATIONS_ENABLED=1"]
-        cppFlags += ["-std=c++0x", "-DPLATFORM_SDK_VERSION=21", "-DANDROID_SMP=0", "-UNDEBUG","-O0", "-DDYNAMIC_ANNOTATIONS_ENABLED=1"]
+        cppFlags += ["-std=c++0x", "-DPLATFORM_SDK_VERSION=21", "-DANDROID_SMP=0", "-UNDEBUG","-O0", "-DDYNAMIC_ANNOTATIONS_ENABLED=1","-DIMT_SIZE=64"]
         ldLibs += ["c++", "art", "cutils","utils", "log",  "m", "c", "atomic", "z", "art_quick_dexposed_invoke_handler"]
         stl = "c++_static" // libart.so extern std::__1::stream  so  use libc++
 
-        ldFlags += "-Lsrc/main/jniLibs/x86"
         abiFilters += ["x86"]
+        abiFilters += ["armeabi-v7a"]
 
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/art".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/art/runtime".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/art/runtime/arch/arm".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/art/runtime/entrypoints/quick".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/external/gtest/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/external/valgrind/main".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/external/valgrind/main/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/external/libcxx/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/system/core/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/frameworks/base/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/frameworks/native/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/libnativehelper/include".toString()
-        cppFlags  += "-I${getProjectDir().toString()}/src/main/jni/include/libnativehelper/include/nativehelper".toString()
+        def android_branch = "android-5.1.0_r5";
+
+        ldFlags += "-L${getRootDir()}/dexposed-patch/${android_branch}/jniLibs/x86".toString()
+        ldFlags += "-L${getRootDir()}/dexposed-patch/${android_branch}/jniLibs/armeabi-v7a".toString()
+
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/art".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/art/runtime".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/art/runtime/arch/arm".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/art/runtime/entrypoints/quick".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/external/gtest/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/external/valgrind/main".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/external/valgrind/main/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/external/libcxx/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/system/core/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/frameworks/base/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/frameworks/native/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/libnativehelper/include".toString()
+        cppFlags  += "-I${getRootDir()}/dexposed-patch/${android_branch}/include/libnativehelper/include/nativehelper".toString()
     }
 }
 
